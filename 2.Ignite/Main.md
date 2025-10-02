@@ -1,51 +1,182 @@
-TryHackMe - Room:Ignite CTF Writeup Solve Step By Step
-Solved By : Prince
+🔥 TryHackMe - Ignite CTF Writeup
+
+https://img.shields.io/badge/TryHackMe-Ignite-red  https://img.shields.io/badge/Difficulty-Easy-green https://img.shields.io/badge/Category-CTF-blue
+
+Solved By: Prince 👑
 Date: 2025-09-30
-Difficulty: Easy
-I started off this CTF by doing some basic enumeration scans.
+Platform: TryHackMe
 
-Port Scan:
-I performed the following port scan:
+---
 
+📋 Executive Summary
+
+This comprehensive writeup documents the complete penetration testing methodology used to compromise the Ignite CTF machine. The target was vulnerable due to an outdated FuelCMS v1.4 installation with publicly available Remote Code Execution (RCE) exploits. The engagement demonstrates a classic web application to root compromise chain.
+
+---
+
+🎯 Attack Flow Overview
+
+```mermaid
+graph TD
+    A[Reconnaissance] --> B[Service Discovery]
+    B --> C[FuelCMS v1.4 Identified]
+    C --> D[RCE Exploitation]
+    D --> E[Credential Discovery]
+    E --> F[Reverse Shell]
+    F --> G[Privilege Escalation]
+    G --> H[Root Compromise]
+```
+
+---
+
+🔍 Phase 1: Reconnaissance
+
+Network Scanning
+
+Initial reconnaissance began with a comprehensive Nmap scan:
+
+```bash
 sudo nmap -vv -sS -sV -sC -oN nmap_out 10.10.62.131
-I got only 1 port from the scan:
+```
 
-PORT   STATE SERVICE REASON         VERSION
-80/tcp open  http    syn-ack ttl 63 Apache httpd 2.4.18 ((Ubuntu))
-Site Exploration:
-I opened the Machine_IP in my browser:
-It looks like it is a content-management site hosted by FuelCMS(v1.4).
+📊 Scan Results:
 
-Scrolled down, found this:
-Tried logging in to http://{MACHINE_IP}/fuel with the above credentials:
-And success! We are in the admin dashboard!
-I was able to access the admin panel but nothing would load. Hopefully nothing here is necessary because I can’t access any of the pages. I looked at some of the Gobuster directories but they also didn’t contain anything interesting. The default page listed the version as 1.4, let’s see if there are any vulnerabilities for this version. We can use Exploit-DB to check for this.
+· Port 80/tcp: HTTP service running Apache httpd 2.4.18 (Ubuntu)
+· Service: FuelCMS v1.4
 
-There are three RCEs that we can use on this version of the CMS.
-It worked! We have the listed file location from the default page of the website, let’s see if we can use “cat” to display the contents of this file. We’ll send the following command to the machine.
+---
 
+🌐 Phase 2: Web Application Assessment
+
+Initial Discovery
+
+· Accessed the target IP in web browser
+· Identified FuelCMS v1.4 as the content management system
+· Discovered default administrative credentials on the landing page
+
+Admin Panel Access
+
+· Successfully logged into /fuel admin dashboard
+· Admin panel functionality was limited but access was confirmed
+
+---
+
+💥 Phase 3: Vulnerability Analysis & Exploitation
+
+Vulnerability Research
+
+· FuelCMS v1.4 has multiple published RCE vulnerabilities
+· Three distinct RCE exploits identified via Exploit-DB
+
+Initial Foothold
+
+Leveraged RCE vulnerability to execute system commands:
+
+```bash
 cat fuel/application/config/database.php
-From this we get a big piece of information, the root credentials.
-We know how to login as root, but we have no way of doing so. We need to try to get a shell in the system so we can change our user to root. Before that though, let’s see if we can submit the user flag using this command interface.
+```
 
-2. Root.txt
-We need a way to get a shell in the system, “sudo -l” doesn’t return anything to us. In my last writeup, I used wget to exploit the machine, maybe on this machine we can use it to move a shell from our system onto the target.
+🔑 Credentials Discovered:
 
-We’ll use PentestMonkey’s reverse php shell for our shell. We’ll start by downloading the shell and replacing the IP and port
-Next we need to set up an HTTP server on our machine for the target to get the shell from. We can do this by using python, we’ll use the following command.
+· Username: root
+· Password: Retrieved from database configuration file
 
+---
+
+🐚 Phase 4: Establishing Foothold
+
+Reverse Shell Deployment
+
+Step 1: Payload Preparation
+
+· Used PentestMonkey's PHP reverse shell
+· Modified with appropriate callback IP and port
+
+Step 2: Payload Delivery
+
+```bash
+# Started HTTP server for payload delivery
 python3 -m http.server 80
-This then will tell us that we’re serving HTTP on port 80.
-Now we can start a netcat listener on our machine to catch the shell when we activate it. We can use the following command to start that.
+```
 
+Step 3: Listener Setup
+
+```bash
+# Established netcat listener
 rlwrap nc -lvnp 4444
-If you need an explainer on the flags specified in the listener, click here.
-We caught the shell! We can’t get to root yet, though, because our shell is not interactive. Let’s upgrade our shell using python. We can run the following command to upgrade.
+```
 
+Step 4: Shell Activation
+
+· Triggered shell download and execution via RCE vulnerability
+· Successfully caught reverse shell connection
+
+---
+
+⬆️ Phase 5: Privilege Escalation
+
+Shell Stabilization
+
+Upgraded to fully interactive TTY shell:
+
+```bash
 python -c 'import pty; pty.spawn("/bin/bash")'
-Now that we can interact with the shell, let’s use “su root” with the password we found earlier to get root on the machine.
-We have root! Let’s grab the flag now and finish up the room!
-Lessons Learned:
-Python can be used to host a HTTP server
-Outdated applications are vulnerable
+```
 
+Root Access
+
+Used discovered credentials for privilege escalation:
+
+```bash
+su root
+# Entered password retrieved from database configuration
+```
+
+---
+
+🏴 Phase 6: Flag Capture
+
+User Flag
+
+· Located and submitted user flag via RCE command interface
+
+Root Flag
+
+· Successfully accessed root directory
+· Captured and submitted root flag
+
+---
+
+🛡️ Security Findings & Recommendations
+
+Critical Vulnerabilities Identified:
+
+1. Outdated Software Components
+   · FuelCMS v1.4 contains known RCE vulnerabilities
+   · Recommendation: Upgrade to latest patched version
+2. Default Credentials Exposure
+   · Default credentials displayed on public-facing page
+   · Recommendation: Remove default credentials and enforce strong password policies
+3. Insufficient Access Controls
+   · RCE vulnerability allowed complete system compromise
+   · Recommendation: Implement proper input validation and sanitization
+
+Lessons Learned:
+
+· Python's HTTP server module is effective for payload delivery
+· Outdated web applications pose significant security risks
+· Proper shell stabilization is crucial for effective post-exploitation
+
+---
+
+📚 References
+
+· FuelCMS Official Site
+· Exploit-DB FuelCMS Vulnerabilities
+· PentestMonkey Reverse Shell Cheat Sheet
+
+---
+
+🎖️ Conclusion
+
+The Ignite CTF machine demonstrated a classic web application penetration testing scenario where outdated software components led to complete system compromise. The engagement highlighted the importance of regular software updates, proper credential management, and robust input validation in web applications.
