@@ -1,7 +1,8 @@
 🔐 TryHackMe - Bounty Hacker CTF Walkthrough
 https://img.shields.io/badge/TryHackMe-Bounty%2520Hacker-red
 https://img.shields.io/badge/Difficulty-Easy-green
-https://img.shields.io/badge/Category-CTF-blue
+https://img.shields.io/ba![Bounty hacker](https://github.com/user-attachments/assets/040ecc23-fe67-4703-90cf-71a949490e44)
+dge/Category-CTF-blue
 https://img.shields.io/badge/OS-Linux-orange
 
 Solved By: Prince 👑
@@ -216,3 +217,4 @@ Reused credentials across services create attack chains
 
 
 Sudo misconfigurations are common privilege escalation vectors
+
