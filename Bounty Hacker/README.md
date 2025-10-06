@@ -12,7 +12,13 @@ Platform: TryHackMe
 This walkthrough details the complete penetration testing methodology for the Bounty Hacker CTF machine. The engagement demonstrates a classic attack chain starting with anonymous FTP access, leading to credential discovery, SSH brute-forcing, and privilege escalation through misconfigured sudo permissions.
 
 🎯 Attack Flow Overview
-
+graph TD
+    A[Reconnaissance] --> B[FTP Anonymous Login]
+    B --> C[Credential Discovery]
+    C --> D[SSH Brute Force]
+    D --> E[Initial Foothold]
+    E --> F[Privilege Escalation]
+    F --> G[Root Compromise]
 
 
 
@@ -207,5 +213,6 @@ Key Takeaways:
 Anonymous services often lead to initial foothold
 
 Reused credentials across services create attack chains
+
 
 Sudo misconfigurations are common privilege escalation vectors
