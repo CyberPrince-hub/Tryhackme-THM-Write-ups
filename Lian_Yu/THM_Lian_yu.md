@@ -1,5 +1,7 @@
 # 🏴‍☠️ TryHackMe Writeup – Lian_Yu
 
+![Lian_yu](https://github.com/user-attachments/assets/4e770a62-64b7-4a6e-8757-e428c33ab9c7)
+
 ---
 
 ## 📌 Executive Summary
@@ -200,3 +202,4 @@ uid=0(root) gid=0(root)
 **Prince Roy**
 Completed Date: 4-02-2026
 **Focus Area:** Penetration Testing | Web Security | Linux Privilege Escalation | TryHackMe
+
