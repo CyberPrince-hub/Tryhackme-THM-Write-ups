@@ -1,6 +1,7 @@
 # 🚀 TryHackMe Writeup – UltraTech
 
-> A clean and beginner‑friendly penetration testing walkthrough of the **UltraTech** room on TryHackMe.
+> A clean and beginner‑friendly penetration testing walkthrough of the **UltraTech** room on TryHackMe.![Ultratech](https://github.com/user-attachments/assets/c8fb64e6-7bc6-4d33-a5cd-9a6f760514ad)
+
 
 ---
 
@@ -227,3 +228,4 @@ uid=0(root) gid=0(root)
 **Prince**
 Completed date: 4-02-2026
 *Penetration Testing | Web Security | Linux Privilege Escalation | TryHackMe*
+
