@@ -1,6 +1,7 @@
 # 🚀 TryHackMe Writeup – VulnNet:Node
 
-> A corrected and accurate penetration testing writeup for the **VulnNet:Node** room on TryHackMe.
+> A Easy and Best penetration testing writeup for the **VulnNet:Node** room on TryHackMe.
+![VulnNet](https://github.com/user-attachments/assets/78406f49-c6d5-4c62-bb6a-1bd166adf9bf)
 
 ---
 
@@ -198,3 +199,4 @@ This writeup is for **educational purposes only** and was performed in a **legal
 **Prince**
 Completed Date: 4-02-2026
 *Penetration Testing | Web Security | Linux Privilege Escalation | TryHackMe*
+
